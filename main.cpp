@@ -38,6 +38,9 @@ void DrawRect(const Vector2 &center, const Vector2 &sizeHalf, int graphHandle, u
 }
 
 bool IsCollision(const Vector2&)
+{
+	return true;
+}
 
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)

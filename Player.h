@@ -1,16 +1,20 @@
 #pragma once
 #include "Vector2.h"
 
-class Player
+#include "GameObject.h"
+
+class Player : public GameObject
 {
 public:
 	Player()
-		:mIsActive(true), mCenterPosition{}, mSizeHalf{ 32.0f, 32.0f }, mSpeed(1.0f)
-	{};
+		:mSpeed(1.0f), mMoveDir{}
+	{
+	};
 
-	Player(const Vector2 &position, const Vector2 &sizeHalf, float speed, bool isActive = true)
-		:mIsActive(isActive), mCenterPosition(position), mSizeHalf(sizeHalf), mSpeed(speed)
-	{};
+	Player(const Vector2& position, const Vector2& sizeHalf, float speed, unsigned int color = 0xffffffff, bool isActive = true)
+		:GameObject(position, sizeHalf, color, isActive), mSpeed(speed)
+	{
+	};
 
 	void Update();
 
@@ -19,22 +23,7 @@ public:
 	void MoveUp();
 	void MoveDown();
 
-	/*void MoveLeftTop();
-	void MoveLeftBottom();
-	void MoveRightTop();
-	void MoveRightBottom();*/
-
-public:
-	bool IsActive() const { return mIsActive; }
-	Vector2 GetPosition() const { return mCenterPosition; }
-	Vector2 GetSizeHalf() const { return mSizeHalf; }
-
-	void SetPosition(const Vector2 &position) { mCenterPosition = position; }
-
 private:
-	bool mIsActive = true;
-	Vector2 mCenterPosition{};
-	Vector2 mSizeHalf{};
 	const float mSpeed = 1.0f;
 	Vector2 mMoveDir{};
 };

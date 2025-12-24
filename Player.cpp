@@ -26,23 +26,3 @@ void Player::MoveDown()
 {
 	mMoveDir.y = 1.0f;
 }
-
-//void Player::MoveLeftTop()
-//{
-//	mMoveDir = { -1.0f, -1.0f };
-//}
-//
-//void Player::MoveLeftBottom()
-//{
-//	mMoveDir = { -1.0f, 1.0f };
-//}
-//
-//void Player::MoveRightTop()
-//{
-//	mMoveDir = { 1.0f, -1.0f };
-//}
-//
-//void Player::MoveRightBottom()
-//{
-//	mMoveDir = { 1.0f, 1.0f };
-//}
