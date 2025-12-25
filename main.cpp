@@ -1,6 +1,8 @@
 #include <Novice.h>
 
 #include "Player.h"
+#include "BaseMob.h"
+#include "Bullet.h"
 #include <memory>
 #include <algorithm>
 
@@ -37,11 +39,18 @@ void DrawRect(const Vector2 &center, const Vector2 &sizeHalf, int graphHandle, u
 	);
 }
 
-bool IsCollision(const Vector2&)
+bool IsCollision(const GameObject &obj1, const GameObject &obj2)
 {
-	return true;
-}
+	Vector2 obj1Min = obj1.GetPosition() - obj1.GetSizeHalf();
+	Vector2 obj1Max = obj1.GetPosition() + obj1.GetSizeHalf();
+	Vector2 obj2Min = obj2.GetPosition() - obj2.GetSizeHalf();
+	Vector2 obj2Max = obj2.GetPosition() + obj2.GetSizeHalf();
 
+	bool isHitX = obj1Min.x <= obj2Max.x && obj1Max.x >= obj2Min.x;
+	bool isHitY = obj1Min.y <= obj2Max.y && obj1Max.y >= obj2Min.y;
+
+	return isHitX && isHitY;
+}
 // Windowsアプリでのエントリーポイント(main関数)
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 {
@@ -58,7 +67,19 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 	const int kWhiteGraphHandle = Novice::LoadTexture("white1x1.png");
 	const Vector2 kDrawMargin = { 10.0f, 10.0f };
 
-	unique_ptr<Player> player = make_unique<Player>(Vector2(kWindowWidth / 2, kWindowHeight - 100), Vector2(32.0f, 32.0f), 10.0f);
+	unique_ptr<Player> player = make_unique<Player>(ObjectTag::Player, Vector2(kWindowWidth / 2, kWindowHeight - 100), Vector2(32.0f, 32.0f), 10, 10.0f, 0x00aaaaff);
+	unique_ptr<BaseMob> testMob = make_unique<BaseMob>(ObjectTag::Enemy, Vector2(kWindowWidth / 2, 100), Vector2(32.0f, 32.0f), 1, 0.1f, 0xaaaa00ff);
+
+	BulletConfig bulletConfig{};
+	bulletConfig.isActive = true;
+	bulletConfig.isDangerous = true;
+	bulletConfig.centerPosition = player->GetPosition();
+	bulletConfig.color = 0x0008888ff;
+	bulletConfig.sizeHalf = Vector2(16.0f, 20.0f);
+	bulletConfig.speed = 10.0f;
+	bulletConfig.tag = ObjectTag::Player;
+	bulletConfig.moveDir = Vector2(0.0f, -1.0f);
+	unique_ptr<Bullet> bullet = make_unique<Bullet>(bulletConfig);
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0)
@@ -84,6 +105,13 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 		};
 		player->SetPosition(clampPosition);
 
+		testMob->Update();
+
+		bullet->Update();
+
+		if (IsCollision(*player, *testMob)) { player->OnCollision(*testMob); }
+		if (IsCollision(*testMob, *bullet)) { testMob->OnCollision(*bullet); }
+
 		///
 		/// ↑更新処理ここまで
 		///
@@ -91,7 +119,25 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 		///
 		/// ↓描画処理ここから
 		///
-		DrawRect(player->GetPosition(), player->GetSizeHalf(), kWhiteGraphHandle, 0x00aaaaff);
+		if (player->IsActive())
+		{
+			DrawRect(player->GetPosition(), player->GetSizeHalf(), kWhiteGraphHandle, player->GetColor());
+		}
+
+		if (testMob->IsActive())
+		{
+			unsigned int color = testMob->GetColor();
+
+			if (IsCollision(*player.get(), *testMob.get())) color -= 0xff;
+			if (IsCollision(*bullet.get(), *testMob.get())) color -= 0xff;
+			DrawRect(testMob->GetPosition(), testMob->GetSizeHalf(), kWhiteGraphHandle, color);
+		}
+
+		if (bullet->IsActive())
+		{
+			DrawRect(bullet->GetPosition(), bullet->GetSizeHalf(), kWhiteGraphHandle, bullet->GetColor());
+		}
+
 		///
 		/// ↑描画処理ここまで
 		///
