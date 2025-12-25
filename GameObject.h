@@ -43,6 +43,7 @@ public:
 		mColor(config.color)
 	{};
 
+	virtual void Update() {};
 	virtual void OnCollision([[maybe_unused]] const GameObject &obj) {};
 
 public:

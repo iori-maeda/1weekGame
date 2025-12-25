@@ -36,7 +36,7 @@ public:
 
 	void OnCollision(const GameObject &obj) override;
 
-	virtual void Update();
+	void Update() override;
 	void StateUpdate();
 	void SelfKill();
 

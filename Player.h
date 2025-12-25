@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector2.h"
 #include "GameObject.h"
+#include "Bullet.h"
 
 struct PlayerConfig : public GameObjectConfig
 {
@@ -25,7 +26,7 @@ public:
 
 	void OnCollision(const GameObject &obj) override;
 
-	void Update();
+	void Update() override;
 
 	void MoveLeft();
 	void MoveRight();
@@ -34,8 +35,13 @@ public:
 
 	void Fire();
 
+public:
+	void SetBuletConfig(const BulletConfig& config) { mBulletConfig = config; }
+
 private:
 	int mHp = 10;
 	const float mSpeed = 1.0f;
 	Vector2 mMoveDir{};
+
+	BulletConfig mBulletConfig{};
 };
