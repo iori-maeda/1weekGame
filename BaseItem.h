@@ -24,7 +24,7 @@ class BaseItem : public BaseMob
 {
 public:
 	BaseItem(const BaseItemConfig &config)
-		:BaseMob(config), mMaxDangerousTime(config.maxDangerousTime), mLevel(config.level), mMaxHp(config.hp), mBaseColor(config.color), mDangerousColor(config.dangerousColor)
+		:BaseMob(config),mType(config.type), mMaxDangerousTime(config.maxDangerousTime), mLevel(config.level), mMaxHp(config.hp), mBaseColor(config.color), mDangerousColor(config.dangerousColor)
 	{};
 
 	void Update() override;
@@ -37,7 +37,7 @@ public:
 
 
 private:
-	void ToWards(const Vector2 &targetPosition);
+	void ToWards();
 
 private:
 	ItemType mType = ItemType::None;

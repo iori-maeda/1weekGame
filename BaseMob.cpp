@@ -1,6 +1,10 @@
 #include "BaseMob.h"
 #include "ObjectsManager.h"
 #include "BaseItem.h"
+#include "NoviceUtility.h"
+#include "Collision.h"
+
+GameObject* BaseMob::mTargetPlayer = nullptr;
 
 void BaseMob::OnCollision(const GameObject &obj)
 {
@@ -46,6 +50,11 @@ void BaseMob::SelfKill()
 	mCurrentState = State::Dead;
 }
 
+void BaseMob::SetTargetPtr(GameObject* target)
+{
+	mTargetPlayer = target;
+}
+
 void BaseMob::Idol()
 {
 	mCurrentState = State::Move;
@@ -53,8 +62,11 @@ void BaseMob::Idol()
 
 void BaseMob::Move()
 {
-	mMoveDir = { 0.0f ,1.0f };
-
+	if(mTargetPlayer)
+	{
+		Vector2 toPlayerDir = Vector2::Normalize(mTargetPlayer->GetPosition() - mCenterPosition);
+		mMoveDir = toPlayerDir;
+	}
 	mCenterPosition += Vector2::Normalize(mMoveDir) * mSpeed;
 }
 
@@ -69,13 +81,16 @@ void BaseMob::Dead()
 
 	mIsActive = false;
 
-	ObjectsManager::CreateItem(mCenterPosition);
+	ObjectsManager::CreateItem(mCenterPosition, ItemType::BulletUpgrade);
 }
 
 void BaseMob::Spawn()
 {
-	mCurrentState = State::Idol;
-	if (mIsActive) { return; }
+	if(Collision::AABB_ToScreen(*this))
+	{
+		mCenterPosition += Vector2::Normalize(mMoveDir) * mSpeed;
+		return;
+	}
 
-	mIsActive = true;
+	mCurrentState = State::Idol;
 }

@@ -69,7 +69,7 @@ void ObjectsManager::AddGameObject(std::unique_ptr<GameObject> obj)
 	mObjects.push_back(std::move(obj));
 }
 
-void ObjectsManager::CreateItem(const Vector2 &position, ItemType type)
+void ObjectsManager::CreateItem(const Vector2& position, ItemType type)
 {
 	BaseItemConfig config{};
 	config.tag = ObjectTag::Item;
@@ -78,4 +78,9 @@ void ObjectsManager::CreateItem(const Vector2 &position, ItemType type)
 
 	std::unique_ptr<BaseItem> newItem = std::make_unique<BaseItem>(config);
 	mObjects.push_back(std::move(newItem));
+}
+
+bool ObjectsManager::IsEnemyAllDead()
+{
+	return std::none_of(mObjects.begin(), mObjects.end(), [](auto& obj) {return obj->CompareTag(ObjectTag::Enemy) && obj->IsActive(); });
 }

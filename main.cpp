@@ -8,6 +8,7 @@
 #include "NoviceUtility.h"
 #include "ObjectsManager.h"
 #include "Collision.h"
+#include "EnemySporner.h"
 
 const char kWindowTitle[] = "LC1D_99_マエダ_イオリ_タイトル";
 
@@ -26,9 +27,10 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 	NoviceUtility::kWhiteGraphHandle = Novice::LoadTexture("white1x1.png");
 
 	unique_ptr<Player> player = make_unique<Player>(ObjectTag::Player, Vector2(NoviceUtility::kWindowWidth / 2, NoviceUtility::kWindowHeight - 100), Vector2(16.0f, 16.0f), 10, 10.0f, 0x00aaaaff);
-	unique_ptr<BaseMob> testMob = make_unique<BaseMob>(ObjectTag::Enemy, Vector2(NoviceUtility::kWindowWidth / 2, 100), Vector2(16.0f, 16.0f), 1, 0.1f, 0xaaaa00ff);
+	unique_ptr<BaseMob> startMob = make_unique<BaseMob>(ObjectTag::Enemy, Vector2(NoviceUtility::kWindowWidth / 2, 100), Vector2(16.0f, 16.0f), 1, 0.1f, 0xaaaa00ff);
 
 	Player* playerPtr = player.get();
+	BaseMob::SetTargetPtr(playerPtr);
 
 	BulletConfig bulletConfig{};
 	
@@ -44,7 +46,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 
 	ObjectsManager::Initialize();
 	ObjectsManager::AddGameObject(move(player));
-	ObjectsManager::AddGameObject(move(testMob));
+	ObjectsManager::AddGameObject(move(startMob));
 
 
 	// ウィンドウの×ボタンが押されるまでループ
@@ -66,6 +68,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 		if (keys[DIK_D]) { playerPtr->MoveRight(); }
 		if (keys[DIK_SPACE] && !preKeys[DIK_SPACE]) { playerPtr->Fire(); }
 
+		EnemySporner::SpawnEnemy();
 		ObjectsManager::UpdateAll();
 		ObjectsManager::CollisionCheckAll();
 
@@ -84,6 +87,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 			break;
 		}
 	}
+
+	ObjectsManager::Finalize();
 
 	// ライブラリの終了
 	Novice::Finalize();

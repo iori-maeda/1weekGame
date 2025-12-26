@@ -163,6 +163,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClCompile Include="BaseMob.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="EnemySporner.cpp" />
     <ClCompile Include="NoviceUtility.cpp" />
     <ClCompile Include="ObjectsManager.cpp" />
     <ClCompile Include="C:\KamataEngine\Adapter\Novice.cpp" />
@@ -177,6 +178,7 @@ xcopy C:\KamataEngine\DirectXGame\Resources "$(OutDirFullPath)NoviceResources" /
     <ClInclude Include="BaseMob.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Collision.h" />
+    <ClInclude Include="EnemySporner.h" />
     <ClInclude Include="NoviceUtility.h" />
     <ClInclude Include="ObjectsManager.h" />
     <ClInclude Include="C:\KamataEngine\DirectXGame\base\StringUtility.h" />

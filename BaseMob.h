@@ -44,6 +44,8 @@ public:
 
 	bool IsDangerous()const { return mIsDangerous; }
 
+	static void SetTargetPtr(GameObject* target);
+
 private:
 	virtual void Idol();
 	virtual void Move();
@@ -58,5 +60,7 @@ protected:
 	Vector2 mMoveDir{};
 
 	State mCurrentState = State::Spawn;
+
+	static GameObject* mTargetPlayer;
 };
 

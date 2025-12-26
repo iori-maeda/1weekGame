@@ -2,6 +2,7 @@
 #include "Vector2.h"
 #include "GameObject.h"
 #include "Bullet.h"
+#include "BaseItem.h"
 
 struct PlayerConfig : public GameObjectConfig
 {
@@ -38,6 +39,9 @@ public:
 
 public:
 	void SetBuletConfig(const BulletConfig &config) { mBulletConfig = config; }
+
+private:
+	void UpGrade(ItemType type, int level);
 
 private:
 	int mHp = 10;

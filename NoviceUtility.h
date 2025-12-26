@@ -7,6 +7,7 @@ namespace NoviceUtility
 	const int kWindowHeight = 720;
 	inline int kWhiteGraphHandle;
 	const Vector2 kDrawMargin = { 10.0f, 10.0f };
+	const Vector2 kCenterScreen = { kWindowWidth / 2.0f ,kWindowHeight / 2.0f };
 
 	/// <summary>
 	/// 
