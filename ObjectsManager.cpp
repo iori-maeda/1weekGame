@@ -2,6 +2,8 @@
 #include "Collision.h"
 #include "NoviceUtility.h"
 
+#include <random>
+
 ObjectsManager* ObjectsManager::mInstance;
 std::list<std::unique_ptr<GameObject>> ObjectsManager::mObjects;
 
@@ -65,4 +67,15 @@ void ObjectsManager::AddGameObject(std::unique_ptr<GameObject> obj)
 {
 	if (mInstance == nullptr) { return; }
 	mObjects.push_back(std::move(obj));
+}
+
+void ObjectsManager::CreateItem(const Vector2 &position, ItemType type)
+{
+	BaseItemConfig config{};
+	config.tag = ObjectTag::Item;
+	config.type = type;
+	config.centerPosition = position;
+
+	std::unique_ptr<BaseItem> newItem = std::make_unique<BaseItem>(config);
+	mObjects.push_back(std::move(newItem));
 }

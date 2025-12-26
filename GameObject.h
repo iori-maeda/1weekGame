@@ -8,6 +8,7 @@ enum class ObjectTag
 	Enemy,
 	Item,
 	DangerousItem,
+	PlayerBullet
 };
 
 struct GameObjectConfig
@@ -15,7 +16,7 @@ struct GameObjectConfig
 	ObjectTag tag = ObjectTag::None;
 	bool isActive = true;
 	Vector2 centerPosition{};
-	Vector2 sizeHalf{};
+	Vector2 sizeHalf{ 5.0f, 5.0f };
 	unsigned int color = 0xffffffff;
 };
 

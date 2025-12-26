@@ -40,6 +40,10 @@ public:
 	void StateUpdate();
 	void SelfKill();
 
+public:
+
+	bool IsDangerous()const { return mIsDangerous; }
+
 private:
 	virtual void Idol();
 	virtual void Move();

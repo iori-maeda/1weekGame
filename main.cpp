@@ -25,19 +25,20 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 
 	NoviceUtility::kWhiteGraphHandle = Novice::LoadTexture("white1x1.png");
 
-	unique_ptr<Player> player = make_unique<Player>(ObjectTag::Player, Vector2(NoviceUtility::kWindowWidth / 2, NoviceUtility::kWindowHeight - 100), Vector2(32.0f, 32.0f), 10, 10.0f, 0x00aaaaff);
-	unique_ptr<BaseMob> testMob = make_unique<BaseMob>(ObjectTag::Enemy, Vector2(NoviceUtility::kWindowWidth / 2, 100), Vector2(32.0f, 32.0f), 1, 0.1f, 0xaaaa00ff);
+	unique_ptr<Player> player = make_unique<Player>(ObjectTag::Player, Vector2(NoviceUtility::kWindowWidth / 2, NoviceUtility::kWindowHeight - 100), Vector2(16.0f, 16.0f), 10, 10.0f, 0x00aaaaff);
+	unique_ptr<BaseMob> testMob = make_unique<BaseMob>(ObjectTag::Enemy, Vector2(NoviceUtility::kWindowWidth / 2, 100), Vector2(16.0f, 16.0f), 1, 0.1f, 0xaaaa00ff);
 
 	Player* playerPtr = player.get();
 
 	BulletConfig bulletConfig{};
+	
 	bulletConfig.isActive = true;
 	bulletConfig.isDangerous = true;
 	bulletConfig.centerPosition = player->GetPosition();
 	bulletConfig.color = 0x0008888ff;
-	bulletConfig.sizeHalf = Vector2(16.0f, 20.0f);
+	bulletConfig.sizeHalf = Vector2(5.0f, 15.0f);
 	bulletConfig.speed = 10.0f;
-	bulletConfig.tag = ObjectTag::Player;
+	bulletConfig.tag = ObjectTag::PlayerBullet;
 	bulletConfig.moveDir = Vector2(0.0f, -1.0f);
 	playerPtr->SetBuletConfig(bulletConfig);
 

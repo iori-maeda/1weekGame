@@ -4,9 +4,36 @@
 
 #include "NoviceUtility.h"
 #include "ObjectsManager.h"
+#include "BaseMob.h"
+#include "BaseItem.h"
 
 void Player::OnCollision(const GameObject &obj)
 {
+	switch (obj.GetTag())
+	{
+	case ObjectTag::Enemy:
+		mHp--;
+		break;
+	case ObjectTag::Item:
+	{
+		const BaseMob &mob = static_cast<const BaseMob &>(obj);
+		if(mob.IsDangerous())
+		{
+			mHp--;
+			break;
+		}
+		else
+		{
+			//const BaseItem& item = static_cast<const BaseItem&>(mob);
+
+			
+		}
+	}
+	break;
+	default:
+		break;
+	}
+
 	if (!obj.CompareTag(ObjectTag::Enemy)) { return; }
 	mHp--;
 	if (mHp <= 0) { mIsActive = false; }
@@ -46,7 +73,7 @@ void Player::MoveDown()
 
 void Player::Fire()
 {
-	mBulletConfig.centerPosition = mCenterPosition;
+	mBulletConfig.centerPosition = mCenterPosition - Vector2(0.0f, mSizeHalf.y);
 	std::unique_ptr<Bullet> bullet = std::make_unique<Bullet>(mBulletConfig);
 	ObjectsManager::AddGameObject(std::move(bullet));
 }

@@ -1,8 +1,10 @@
 #include "BaseMob.h"
+#include "ObjectsManager.h"
+#include "BaseItem.h"
 
 void BaseMob::OnCollision(const GameObject &obj)
 {
-	if (!obj.CompareTag(ObjectTag::Player)) { return; }
+	if (!obj.CompareTag(ObjectTag::Player) && !obj.CompareTag(ObjectTag::PlayerBullet) ) { return; }
 	const BaseMob &mob = static_cast<const BaseMob &>(obj);
 	if (!mob.mIsDangerous) { return; }
 	mHp--;
@@ -66,6 +68,8 @@ void BaseMob::Dead()
 	if (!mIsActive) { return; }
 
 	mIsActive = false;
+
+	ObjectsManager::CreateItem(mCenterPosition);
 }
 
 void BaseMob::Spawn()

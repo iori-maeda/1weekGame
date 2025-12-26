@@ -4,10 +4,9 @@
 void Bullet::OnCollision(const GameObject &obj)
 {
 	bool checkCollisionType = obj.CompareTag(ObjectTag::Item) || obj.CompareTag(ObjectTag::Enemy);
-	bool isPlayerBullet = this->CompareTag(ObjectTag::Player);
 
 
-	if(checkCollisionType && isPlayerBullet)
+	if(checkCollisionType)
 	{
 		mIsActive = false;
 	}

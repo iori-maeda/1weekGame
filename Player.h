@@ -7,6 +7,7 @@ struct PlayerConfig : public GameObjectConfig
 {
 	int hp = 10;
 	float speed = 1.0f;
+	float shotInterval = 1.0f;
 };
 
 class Player : public GameObject
@@ -21,7 +22,7 @@ public:
 	{};
 
 	Player(const PlayerConfig &config)
-		:GameObject(config), mHp(config.hp), mSpeed(config.speed)
+		:GameObject(config), mHp(config.hp), mSpeed(config.speed), mShotInterval(config.shotInterval), mMaxBulletCount(1)
 	{};
 
 	void OnCollision(const GameObject &obj) override;
@@ -36,12 +37,15 @@ public:
 	void Fire();
 
 public:
-	void SetBuletConfig(const BulletConfig& config) { mBulletConfig = config; }
+	void SetBuletConfig(const BulletConfig &config) { mBulletConfig = config; }
 
 private:
 	int mHp = 10;
 	const float mSpeed = 1.0f;
 	Vector2 mMoveDir{};
+
+	float mShotInterval = 1.0f;
+	int mMaxBulletCount = 1;
 
 	BulletConfig mBulletConfig{};
 };
