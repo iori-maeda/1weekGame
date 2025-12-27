@@ -80,6 +80,21 @@ void ObjectsManager::CreateItem(const Vector2& position, ItemType type)
 	mObjects.push_back(std::move(newItem));
 }
 
+void ObjectsManager::DebugDraw()
+{
+	if (mInstance == nullptr) { return; }
+	for(auto& obj : mObjects)
+	{
+		NoviceUtility::DrawDebugObjectInformation(
+			Vector2(
+				NoviceUtility::kDrawMargin.x,
+				NoviceUtility::kDrawMargin.y + 20.0f * static_cast<float>(std::distance(mObjects.begin(), std::find_if(mObjects.begin(), mObjects.end(), [&](auto& o) {return o.get() == obj.get(); })))
+			),
+			*obj
+		);
+	}
+}
+
 bool ObjectsManager::IsEnemyAllDead()
 {
 	return std::none_of(mObjects.begin(), mObjects.end(), [](auto& obj) {return obj->CompareTag(ObjectTag::Enemy) && obj->IsActive(); });

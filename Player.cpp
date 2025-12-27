@@ -51,6 +51,8 @@ void Player::Update()
 	};
 	mCenterPosition = clampPosition;
 
+	mShotIntervalTimer -= 1.0f / 60.0f;
+
 	if (Vector2::Normalize(mMoveDir).Length() <= 0.0f) { return; }
 	mBulletConfig.moveDir = mMoveDir;
 	mMoveDir = {};
@@ -78,12 +80,13 @@ void Player::MoveDown()
 
 void Player::Fire()
 {
-	//mMaxBulletCount = 10;
+	if (mShotIntervalTimer > 0.0f) { return; }
+	
 	float pi = std::numbers::pi_v<float>;
 	float centerAngle = pi / 2.0f; // 真上 (0, -1)
 	float spread = pi;       // 左右に45度ずつ広げる例
 
-	for (int i = 0; i <= mMaxBulletCount; i++) {
+	for (int i = 1; i <= mMaxBulletCount; i++) {
 		// -spread から +spread までを分割する
 		float offset = -spread + (spread * 2.0f / (mMaxBulletCount)) * i;
 		float angle = centerAngle + offset;
@@ -95,6 +98,8 @@ void Player::Fire()
 
 		ObjectsManager::AddGameObject(std::make_unique<Bullet>(mBulletConfig));
 	}
+
+	mShotIntervalTimer = mShotIntervalTime;
 }
 
 void Player::UpGrade(ItemType type, int level)
@@ -105,6 +110,8 @@ void Player::UpGrade(ItemType type, int level)
 		break;
 	case ItemType::BulletUpgrade:
 		mMaxBulletCount++;
+		mBulletConfig.damage += level;
+		mShotIntervalTime *= 0.9f;
 		break;
 	case ItemType::Heal:
 		mHp += level;

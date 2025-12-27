@@ -29,4 +29,16 @@ namespace NoviceUtility
 			obj.GetColor()
 		);
 	}
+	void DrawDebugObjectInformation(const Vector2& position, const GameObject& info)
+	{
+		Novice::ScreenPrintf(
+			static_cast<int>(position.x),
+			static_cast<int>(position.y),
+			"Tag:%d Pos:(%.1f,%.1f) Size:(%.1f,%.1f) Active:%d",
+			static_cast<int>(info.GetTag()),
+			info.GetPosition().x, info.GetPosition().y,
+			info.GetSizeHalf().x, info.GetSizeHalf().y,
+			static_cast<int>(info.IsActive())
+		);
+	}
 }

@@ -5,7 +5,7 @@
 
 struct BulletConfig : public BaseMobConfig
 {
-
+	int damage = 1;
 };
 
 class Bullet : public BaseMob

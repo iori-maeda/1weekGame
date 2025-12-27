@@ -15,6 +15,8 @@ public:
 	static void AddGameObject(std::unique_ptr<GameObject> obj);
 	static void CreateItem(const Vector2 &position, ItemType type = ItemType::None);
 
+	static void DebugDraw();
+
 public:
 	static bool IsEnemyAllDead();
 

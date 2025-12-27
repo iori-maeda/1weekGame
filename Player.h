@@ -23,7 +23,7 @@ public:
 	{};
 
 	Player(const PlayerConfig &config)
-		:GameObject(config), mHp(config.hp), mSpeed(config.speed), mShotInterval(config.shotInterval), mMaxBulletCount(1)
+		:GameObject(config), mHp(config.hp), mSpeed(config.speed), mShotIntervalTime(config.shotInterval), mShotIntervalTimer(0.0f), mMaxBulletCount(1)
 	{};
 
 	void OnCollision(const GameObject &obj) override;
@@ -48,7 +48,8 @@ private:
 	const float mSpeed = 1.0f;
 	Vector2 mMoveDir{};
 
-	float mShotInterval = 1.0f;
+	float mShotIntervalTime = 1.0f;
+	float mShotIntervalTimer = 0.0f;
 	int mMaxBulletCount = 1;
 
 	BulletConfig mBulletConfig{};

@@ -15,27 +15,25 @@ using namespace std;
 
 int EnemySporner::sEnemySpawnCount = 1;
 
-void EnemySporner::SpawnEnemy()
+void EnemySporner::SpawnEnemy(const BaseMobConfig& config)
 {
 	if (!ObjectsManager::IsEnemyAllDead()) { return; }
 
 	sEnemySpawnCount++;
 	for (int i = 0; i < sEnemySpawnCount; i++)
 	{
-		float randomAngle = rand() % 360 * (std::numbers::pi_v<float> / 180.0f);
-		const float kBaseSpawnPositionLength = Vector2(static_cast<float>(NoviceUtility::kWindowWidth), static_cast<float>(NoviceUtility::kWindowHeight)).Length() * 1.1f;
+		float randomAngle = rand() % 361 * (std::numbers::pi_v<float> / 180.0f);
+		Vector2 screenSize = Vector2(static_cast<float>(NoviceUtility::kWindowWidth), static_cast<float>(NoviceUtility::kWindowHeight));
+		const float kBaseSpawnPositionLength = screenSize.Length() / 2.0f;
 
 		Vector2 spanwPosition = Vector2(cosf(randomAngle), sinf(randomAngle)) * kBaseSpawnPositionLength + NoviceUtility::kCenterScreen;
 
-		BaseMobConfig config{};
-		config.tag = ObjectTag::Enemy;
-		config.centerPosition = spanwPosition;
-		config.sizeHalf = Vector2(16.0f, 16.0f);
-		config.hp = sEnemySpawnCount * sEnemySpawnCount;
-		config.moveDir = Vector2::Normalize(NoviceUtility::kCenterScreen - spanwPosition);
-		config.color = 0xaaaa00ff;
+		BaseMobConfig spawnConfig = config;
+		spawnConfig.tag = ObjectTag::Enemy;
+		spawnConfig.centerPosition = spanwPosition;
+		spawnConfig.moveDir = Vector2::Normalize(NoviceUtility::kCenterScreen - spanwPosition);
 
-		unique_ptr<BaseMob> mob = make_unique<BaseMob>(config);
+		unique_ptr<BaseMob> mob = make_unique<BaseMob>(spawnConfig);
 
 		ObjectsManager::AddGameObject(move(mob));
 	}

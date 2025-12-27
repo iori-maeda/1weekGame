@@ -25,4 +25,6 @@ namespace NoviceUtility
 		const Vector2& drawArea = Vector2(1.0f, 1.0f),
 		const Vector2& scale = Vector2(1.0f, 1.0f)
 	);
+
+	void DrawDebugObjectInformation(const Vector2& position, const GameObject& info);
 };

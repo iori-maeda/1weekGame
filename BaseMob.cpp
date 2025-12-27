@@ -86,9 +86,9 @@ void BaseMob::Dead()
 
 void BaseMob::Spawn()
 {
-	if(Collision::AABB_ToScreen(*this))
+	if(!Collision::AABB_ToScreen(*this))
 	{
-		mCenterPosition += Vector2::Normalize(mMoveDir) * mSpeed;
+		Move();
 		return;
 	}
 
