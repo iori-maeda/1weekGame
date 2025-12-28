@@ -1,6 +1,7 @@
 #pragma once
 #include "Vector2.h"
 #include "GameObject.h"
+#include "ParticleManager.h"
 
 struct BaseMobConfig : public GameObjectConfig
 {
@@ -8,6 +9,8 @@ struct BaseMobConfig : public GameObjectConfig
 	float speed = 1.0f;
 	Vector2 moveDir = { 0.0f, 1.0f };
 	bool isDangerous = false;
+	ParticleConfig moveParticleConfig{};
+	ParticleConfig deathParticleConfig{};
 };
 
 class BaseMob : public GameObject
@@ -26,13 +29,19 @@ public:
 		:mSpeed(1.0f), mMoveDir{}
 	{};
 
-	BaseMob(ObjectTag tag, const Vector2 &position, const Vector2 &sizeHalf, int hp, float speed, unsigned int color = 0xffffffff, bool isActive = true, bool isDangerous = false)
+	BaseMob(ObjectTag tag, const Vector2& position, const Vector2& sizeHalf, int hp, float speed, unsigned int color = 0xffffffff, bool isActive = true, bool isDangerous = false)
 		:GameObject(tag, position, sizeHalf, color, isActive), mHp(hp), mIsDangerous(isDangerous), mSpeed(speed)
-	{};
+	{
+		mParticleManager = std::make_unique<ParticleManager>();
+		mParticleManager->Initialize(mCenterPosition, mSizeHalf * 2.0f);
+	};
 
 	BaseMob(const BaseMobConfig &config)
 		:GameObject(config), mHp(config.hp), mIsDangerous(config.isDangerous), mSpeed(config.speed), mMoveDir(config.moveDir)
-	{};
+	{
+		mParticleManager = std::make_unique<ParticleManager>();
+		mParticleManager->Initialize(mCenterPosition, mSizeHalf * 2.0f);
+	};
 
 	void OnCollision(const GameObject &obj) override;
 
@@ -45,6 +54,9 @@ public:
 	bool IsDangerous()const { return mIsDangerous; }
 
 	static void SetTargetPtr(GameObject* target);
+
+	void SetMoveParticleConfig(const ParticleConfig& config) { mMoveParticleConfig = config; }
+	void SetDeathParticleConfig(const ParticleConfig& config) { mDeathParticleConfig = config; }
 
 private:
 	virtual void Idol();
@@ -62,5 +74,10 @@ protected:
 	State mCurrentState = State::Spawn;
 
 	static GameObject* mTargetPlayer;
+
+	std::unique_ptr<ParticleManager> mParticleManager;
+	
+	ParticleConfig mMoveParticleConfig{};
+	ParticleConfig mDeathParticleConfig{};
 };
 

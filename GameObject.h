@@ -8,7 +8,8 @@ enum class ObjectTag
 	Enemy,
 	Item,
 	DangerousItem,
-	PlayerBullet
+	PlayerBullet,
+	Particle
 };
 
 struct GameObjectConfig

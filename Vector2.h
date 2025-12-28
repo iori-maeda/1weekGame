@@ -20,6 +20,7 @@ public:
 
 	friend Vector2 operator+(const Vector2& v1,const Vector2& v2);
 	friend Vector2 operator-(const Vector2& v1,const Vector2& v2);
+	friend Vector2 operator-(const Vector2& v);
 	friend Vector2 operator*(const Vector2& v,float n);
 	friend Vector2 operator*(float n, const Vector2& v);
 	friend Vector2 operator/(const Vector2& v,float n);

@@ -35,6 +35,33 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>KamataEngine</Filter>
     </ClCompile>
+    <ClCompile Include="BaseItem.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemySporner.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="NoviceUtility.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectsManager.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="EasingFunction.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleManager.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Random.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>KamataEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="C:\KamataEngine\DirectXGame\audio\Audio.h">
@@ -123,5 +150,14 @@
     <ClInclude Include="BaseMob.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="BaseItem.h" />
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="EnemySporner.h" />
+    <ClInclude Include="NoviceUtility.h" />
+    <ClInclude Include="ObjectsManager.h" />
+    <ClInclude Include="EasingFunction.h" />
+    <ClInclude Include="ParticleManager.h" />
+    <ClInclude Include="Random.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
 </Project>

@@ -68,6 +68,10 @@ void BaseMob::Move()
 		mMoveDir = toPlayerDir;
 	}
 	mCenterPosition += Vector2::Normalize(mMoveDir) * mSpeed;
+
+	Vector2 emittPosition = mCenterPosition + Vector2::Normalize(-mMoveDir) * mSizeHalf.x;
+	mParticleManager->SetEmittionPosition(emittPosition);
+	mParticleManager->Emittion(mMoveParticleConfig, 1);
 }
 
 void BaseMob::Attack()
@@ -82,6 +86,10 @@ void BaseMob::Dead()
 	mIsActive = false;
 
 	ObjectsManager::CreateItem(mCenterPosition, ItemType::BulletUpgrade);
+
+	Vector2 emittPosition = mCenterPosition - Vector2::Normalize(mMoveDir) * mSizeHalf.x;
+	mParticleManager->SetEmittionPosition(emittPosition);
+	mParticleManager->Emittion(mDeathParticleConfig, 10);
 }
 
 void BaseMob::Spawn()

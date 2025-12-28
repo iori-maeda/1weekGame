@@ -11,6 +11,10 @@
 #include "EnemySporner.h"
 #include <random>
 #include <time.h>
+#include "ParticleManager.h"
+#include "Random.h"
+#include "Timer.h"
+#include "EasingFunction.h"
 
 const char kWindowTitle[] = "LC1D_99_マエダ_イオリ_タイトル";
 
@@ -28,6 +32,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 	srand(static_cast<unsigned int>(time(nullptr)));
 
 	NoviceUtility::kWhiteGraphHandle = Novice::LoadTexture("white1x1.png");
+
+	Random::Initialize();
 
 
 	PlayerConfig playerConfig{};
@@ -49,6 +55,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 	startMobConfig.centerPosition = Vector2(NoviceUtility::kWindowWidth / 2, 100);
 	startMobConfig.speed = 0.0f;
 	startMobConfig.isActive = true;
+	startMobConfig.moveDir = Vector2(0.0f, 1.0f);
 	unique_ptr<BaseMob> startMob = make_unique<BaseMob>(startMobConfig);
 
 	Player* playerPtr = player.get();
@@ -59,6 +66,23 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 	baseMobConfig.sizeHalf = Vector2(16.0f, 16.0f);
 	baseMobConfig.hp = 10;
 	baseMobConfig.color = 0xaaaa00ff;
+
+	ParticleConfig moveParticleConfig{};
+	moveParticleConfig.color = baseMobConfig.color / 3;
+	moveParticleConfig.sizeHalf = Vector2(2.0f, 2.0f);
+	baseMobConfig.moveParticleConfig = moveParticleConfig;
+
+	ParticleConfig deathParticleConfig{};
+	deathParticleConfig.color = 0x666666ff;
+	deathParticleConfig.sizeHalf = Vector2(2.0f, 2.0f);
+	deathParticleConfig.maxLifeTime = 5.0f;
+	deathParticleConfig.isAcceleration = true;
+	deathParticleConfig.moveDir = Vector2(0.0f, -1.0f);
+	deathParticleConfig.speed = 0.2f;
+	deathParticleConfig.acceleration = Vector2(0.0f, -0.2f);
+	baseMobConfig.deathParticleConfig = deathParticleConfig;
+
+
 
 	BulletConfig bulletConfig{};
 	bulletConfig.isActive = true;
@@ -77,8 +101,10 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 	ObjectsManager::AddGameObject(move(startMob));
 
 	int waveCount = 0;
-
-
+	Vector2 screenWaveTextPosition = Vector2();
+	std::unique_ptr<Timer> waveTimer = std::make_unique<Timer>();
+	waveTimer->Initialize(5.0f, TimerCountPettern::ADD);
+	waveTimer->Reset();
 
 	// ウィンドウの×ボタンが押されるまでループ
 	while (Novice::ProcessMessage() == 0)
@@ -101,11 +127,16 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 		ObjectsManager::UpdateAll();
 		ObjectsManager::CollisionCheckAll();
 
+
+		waveTimer->Update();
 		if (ObjectsManager::IsEnemyAllDead()) {
+			waveTimer->Start();
+			waveTimer->Reset();
+
 			waveCount++;
 
- 			baseMobConfig.hp = waveCount * waveCount;
-			baseMobConfig.color = 0xffaa00ff -(waveCount * 0x00110000);
+			baseMobConfig.hp = waveCount * waveCount;
+			baseMobConfig.color = 0xffaa00ff - (waveCount * 0x00110000);
 			baseMobConfig.sizeHalf = Vector2(16.0f + waveCount * 2.0f, 16.0f + waveCount * 2.0f);
 			baseMobConfig.speed = 0.3f + waveCount * 0.02f;
 
@@ -114,6 +145,16 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int)
 
 		ObjectsManager::DrawAll();
 		ObjectsManager::DebugDraw();
+
+		if (waveTimer->isCounting())
+		{
+			float easeT = EasingFunction::EaseInCirc(waveTimer->GetTimeRate());
+			screenWaveTextPosition = Vector2::Lerp(Vector2(NoviceUtility::kWindowWidth, 100.0f), Vector2(-100.0f, 100.0f), easeT);
+			Novice::ScreenPrintf(
+				static_cast<int>(screenWaveTextPosition.x),
+				static_cast<int>(screenWaveTextPosition.y),
+				"WAVE : %02d", waveCount);
+		}
 
 		///
 		/// ↑描画処理ここまで
